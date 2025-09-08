@@ -1,0 +1,38 @@
+.title {
+    color: #333;
+    font-size: 20px;
+    text-align: center;
+}
+
+
+.nav {
+    display: flex;
+    padding: 15px;
+    align-items: center;
+    background: white;
+}
+
+.nav button {
+    margin-right: 15px;
+    background: none;
+    font-size: 25px;
+    border-radius: 5px;
+}
+
+.nav button:hover {
+    cursor: pointer;
+    color: grey;
+}
+
+.nav a {
+    margin-right: 10px;
+    font-size: 30px;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.logo {
+    font-weight: bold;
+}

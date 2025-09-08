@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song List</title>
+    <link rel="stylesheet" href="/list.css">
+    <link rel="stylesheet" href="/main.css">
+</head>
+
+<body class="grey-bg">
+    <%- include('nav.ejs') %>
+
+        <div class="white-bg">
+            <% songs.forEach(function(song) { %>
+                <div class="list-box">
+                    <img src="https://picsum.photos/seed/picsum/200/300" alt="Random Image" class="list-img">
+                    <h4>
+                        <%= song.name %>
+                    </h4>
+                    <p>
+                        <%= song.artist %>
+                    </p>
+                </div>
+                <% }); %>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+
+        </script>
+</body>
+
+
+
+</html>

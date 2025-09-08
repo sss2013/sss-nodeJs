@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>曲追加</title>
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/addSong.css">
+</head>
+
+<body>
+    <%- include('nav.ejs') %>
+
+        <div class="form-container">
+            <form id="addForm" action="/add" method="POST">
+                <label for="artist">アーティスト名:</label>
+                <input type="text" id="artist" name="artist" required>
+                <br>
+                <label for="name">曲名:</label>
+                <input type="text" id="name" name="name" required>
+                <br>
+                <button type="submit" handleSubmit={}>追加</button>
+            </form>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $('#addForm').on('submit', function (e) {
+                const artist = $('#artist').val();
+                const songName = $('#name').val();
+
+                const regex = /^[a-zA-Z\d!@#$%^&*ぁ-んァ-ン一-龯]{2,30}/;
+
+                if (!regex.test(artist)) {
+                    alert('歌手名は漢字、ひらがな、カタカナ、英語と数字、記号以外は入力できません');
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        </script>
+</body>
+
+
+
+</html>
