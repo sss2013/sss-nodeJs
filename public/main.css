@@ -1,0 +1,33 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: #333;
+}
+
+h3 {
+    color: #666;
+}
+
+h5 {
+    color: #999;
+}
+
+
+.nav {
+    display: flex;
+    padding: 15px;
+    align-items: center;
+    background: white;
+}
+
+.nav a {
+    margin-right: 10px;
+}
+
+.logo {
+    font-weight: bold;
+}
