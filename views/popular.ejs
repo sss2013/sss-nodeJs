@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人気曲</title>
+    <link rel="stylesheet" href="/popular.css">
+    <link rel="stylesheet" href="/main.css">
+</head>
+
+<body>
+    <div class="grey-bg">
+        <%- include('nav.ejs') %>
+
+            <div class="white-bg">
+                <% songs.forEach(function(song) { %>
+                    <div class="item-container">
+                        <div class="image-box">
+                            <a href="/detail/<%= song._id %>">
+                                <img src="https://picsum.photos/seed/picsum/150/150" alt="Random Image" class="image">
+                            </a>
+                        </div>
+                        <div class="song-description">
+                            <h4>
+                                <%= song.name %>
+                            </h4>
+                            <p>
+                                <%= song.artist %>
+                            </p>
+                        </div>
+                        <div class="like-description">
+                            <p style="font-size:20px; font-weight: bold;">
+                                ❤ <%= song.like %>
+                            </p>
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
+    </div>
+</body>
+
+</html>

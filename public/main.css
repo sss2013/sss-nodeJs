@@ -28,12 +28,14 @@ h5 {
     margin-right: 15px;
     background: none;
     font-size: 25px;
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 .nav button:hover {
     cursor: pointer;
     color: grey;
+    transform: scale(1.1);
+    transition: all 0.4s;
 }
 
 .nav a {

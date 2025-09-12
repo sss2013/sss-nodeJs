@@ -1,0 +1,18 @@
+.white-bg {
+    background-color: white;
+
+}
+
+.image {
+    border-radius: 10px;
+}
+
+.item-container {
+    flex-wrap: wrap;
+    display: flex;
+}
+
+.item-container div {
+    margin: 20px;
+
+}

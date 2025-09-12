@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/detail.css">
+
+    <title>曲詳細</title>
+</head>
+
+<body>
+    <%- include('nav.ejs') %>
+        <h1 style="margin-left:20px;">曲詳細ページ</h1>
+        <div class="detail-container">
+            <div class="detail-image">
+                <img src="https://picsum.photos/seed/picsum/300/300" alt="Random Image" class="list-img">
+            </div>
+            <div class="detail-description">
+                <a href="/update/<%= song._id %>">
+                    <button class="update-button">
+                        情報修正
+                    </button>
+                </a><br>
+                <button class="delete-button">
+                    削除
+                </button>
+                <p>
+                    <%= song.name %>
+                </p>
+                <p>
+                    <%= song.artist %>
+                </p>
+            </div>
+            <div class="detail-like">
+                <div class="like-image">
+                    <form action="/like?_method=PUT" method="POST">
+                        <input style="display:none" name="id" value="<%= song._id %>">
+                        <input type="image" src="/images/like.png" alt="Like">
+                    </form>
+                </div>
+                <div>
+                    <p style="font-size:30px; font-weight: bold;">
+                        <%= song.like %>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            $('.delete-button').on('click', function () {
+                if (!confirm('本当に削除しますか？')) {
+                    return;
+                }
+                axios.delete('/delete', {
+                    data: { id: '<%= song._id %>' }
+                })
+                    .then(function (res) {
+                        alert('削除しました');
+                        window.location.href = '/list';
+                    })
+                    .catch(function (err) {
+                        alert('削除に失敗しました');
+                    });
+            });
+        </script>
+
+</body>
+
+</html>

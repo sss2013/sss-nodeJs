@@ -15,20 +15,69 @@
         <div class="white-bg">
             <% songs.forEach(function(song) { %>
                 <div class="list-box">
-                    <img src="https://picsum.photos/seed/picsum/200/300" alt="Random Image" class="list-img">
+                    <a href="/detail/<%= song._id %>">
+                        <img src="https://picsum.photos/seed/picsum/200/300" alt="Random Image" class="list-img">
+                    </a>
                     <h4>
                         <%= song.name %>
                     </h4>
                     <p>
                         <%= song.artist %>
+
                     </p>
+
                 </div>
                 <% }); %>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
+            // リロードなしで削除、実装はしない
+            // function renderSongs(songs) {
+            //     const container = $('.white-bg');
+            //     container.empty();
+            //     songs.forEach(function (song) {
+            //         container.append(`
+            //     <div class="list-box">
+            //         <a href="/detail/${song._id}">
+            //             <img src="https://picsum.photos/seed/picsum/200/300" alt="Random Image" class="list-img">
+            //         </a>
+            //         <h4>${song.name}</h4>
+            //         <div>
+            //             <p>
+            //                 ${song.artist}
+            //                 <span class="delete" data-id="${song._id}">삭제</span>
+            //             </p>
+            //         </div>
+            //     </div>
+            // `);
+            //     });
+            //     // 이벤트 재등록
+            //     $('.delete').on('click', deleteHandler);
+            // }
 
+            // function deleteHandler(e) {
+            //     if (!confirm('本当に削除しますか？')) {
+            //         return;
+            //     }
+            //     const id = $(this).data('id');
+            //     fetch('/delete', {
+            //         method: 'DELETE',
+            //         headers: { 'Content-Type': 'application/json' },
+            //         body: JSON.stringify({ id })
+            //     }).then(res => {
+            //         if (res.ok) {
+            //             return res.json().then(data => {
+            //                 alert('削除しました');
+            //                 renderSongs(data.songs);
+            //             });
+            //         } else {
+            //             alert('削除に失敗しました');
+            //         }
+            //     });
+            // };
+
+            // $('.delete').on('click', deleteHandler);
         </script>
 </body>
 

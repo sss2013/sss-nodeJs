@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>曲修正</title>
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/updateSong.css">
+</head>
+
+<body>
+    <form id="updateForm" action="/update?_method=PUT" method="POST">
+        <h1 style="margin-left:20px;">曲修正ページ</h1>
+        <div class="update-container">
+            <div class="update-description">
+                <input style="display:none" name="id" value="<%= song._id %>">
+                <label for="name">曲名:</label>
+                <input type="text" id="name" name="name" value="<%= song.name %>"><br><br>
+                <label for="artist">アーティスト名:</label>
+                <input type="text" id="artist" name="artist" value="<%= song.artist %>"><br><br>
+                <button type="submit" class="save-button">保存</button>
+            </div>
+        </div>
+    </form>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $('#updateForm').on('submit', function (e) {
+            const artist = $('#artist').val();
+            const songName = $('#name').val();
+
+            const regex = /^[a-zA-Z\d!@#$%^&*ぁ-んァ-ン一-龯]{2,30}/;
+
+            if (!regex.test(artist)) {
+                alert('歌手名は漢字、ひらがな、カタカナ、英語と数字、記号以外は入力できません');
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+</body>
+
+</html>

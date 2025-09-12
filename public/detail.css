@@ -1,0 +1,64 @@
+.detail-container {
+    flex-wrap: wrap;
+    display: flex;
+}
+
+.detail-container div {
+    margin: 20px;
+}
+
+.update-button {
+    background-color: blue;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+.update-button:hover {
+    background-color: darkblue;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+.delete-button {
+    background-color: red;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+.like-image:hover {
+    transform: scale(1.1);
+    transition: all 0.3s ease;
+}
+
+.detail-description>p {
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.detail-like {
+    flex-wrap: wrap;
+    display: flex;
+}
+
+.like-image {
+    height: 128px;
+    background-color: grey;
+    border-radius: 10px;
+}
