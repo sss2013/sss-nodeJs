@@ -31,7 +31,7 @@
                 const artist = $('#artist').val();
                 const songName = $('#name').val();
 
-                const regex = /^[a-zA-Z\d!@#$%^&*ぁ-んァ-ン一-龯]{2,30}/;
+                const regex = /^[a-zA-Z\d!@#$%^&*ぁ-んァ-ン一-龯\s]{2,30}/;
 
                 if (!regex.test(artist)) {
                     alert('歌手名は漢字、ひらがな、カタカナ、英語と数字、記号以外は入力できません');

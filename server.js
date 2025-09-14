@@ -1,5 +1,8 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
+const port = 8080;
+const cors = require('cors');
+app.use(cors());
 
 let db
 require('dotenv').config()
@@ -19,11 +22,25 @@ app.set('view engine', 'ejs')
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'))
-app.listen(8080, () => {
+app.listen(port, () => {
     console.log('Server is running on port 8080')
 })
 const methodOverride = require('method-override')
 app.use(methodOverride('_method'))
+
+app.listen(port, () => {
+    console.log('Server is running on port 8080')
+})
+
+app.get('/api/hello', async (req, res) => {
+    const list = await db.collection('songs').find().toArray();
+    const songs = list.map(song => ({
+        id: song._id,
+        artist: song.artist,
+        name: song.name,
+    }));
+    res.json({ songs });
+})
 
 app.get('/', (req, res) => {
     res.render('home.ejs');
@@ -158,4 +175,29 @@ app.delete('/delete', async (req, res) => {
         console.log(err)
         return res.status(500).send('Error deleting song');
     }
+})
+
+app.get('/list/page', async (req, res) => {
+    const perPage = 5
+    const page = req.params.number
+    let result = await db.collection('songs').find().limit(perPage).toArray();
+    res.render('page.ejs', { songs: result, isFirstPage: true })
+})
+
+app.get('/list/prev/:id', async (req, res) => {
+    const minSong = await db.collection('songs').find().sort({ _id: 1 }).limit(1).toArray();
+    const minId = minSong[0]._id;
+    const firstId = new ObjectId(req.params.id);
+    const perPage = 5
+    let result = await db.collection('songs').find({ _id: { $lt: firstId } }).sort({ _id: -1 }).limit(perPage).toArray()
+    result.reverse()
+    const isFirstPage = result.length > 0 && firstId.equals(minId);
+    res.render('page.ejs', { songs: result, isFirstPage: isFirstPage })
+})
+
+app.get('/list/next/:id', async (req, res) => {
+    const lastId = new ObjectId(req.params.id)
+    const perPage = 5
+    let result = await db.collection('songs').find({ _id: { $gt: lastId } }).limit(perPage).toArray()
+    res.render('page.ejs', { songs: result, isFirstPage: false })
 })

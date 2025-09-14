@@ -1,0 +1,59 @@
+.grey-bg {
+    background: #eee;
+}
+
+.white-bg {
+    background: white;
+    margin: 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.page-button-container {
+    text-align: right;
+    margin-right: 20px;
+}
+
+.page-button-container button {
+    margin-right: 15px;
+    background: black;
+    width: 50px;
+    color: white;
+    font-size: 25px;
+    border-radius: 4px;
+}
+
+.page-button-container button:hover {
+    cursor: pointer;
+    color: grey;
+    transform: scale(1.1);
+    transition: all 0.4s;
+}
+
+.page-button.block {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.page-button-container>.disabled {
+    pointer-events: none;
+}
+
+
+.list-box {
+    padding: 10px;
+    border-bottom: 1px solid#eee;
+
+}
+
+.list-box h4 {
+    font-size: 16px;
+    margin: 5px;
+}
+
+.list-box p {
+    font-size: 13px;
+    margin: 5px;
+    color: grey;
+}

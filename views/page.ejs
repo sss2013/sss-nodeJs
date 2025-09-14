@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Song List</title>
-    <link rel="stylesheet" href="/list.css">
+    <title>Song Page</title>
+    <link rel="stylesheet" href="/page.css">
     <link rel="stylesheet" href="/main.css">
 </head>
 
@@ -27,7 +27,22 @@
 
                 </div>
                 <% }); %>
+
         </div>
+        <div class="page-button-container">
+            <a href="/list/prev/<%= songs[0]._id %>" class="<%= isFirstPage ? 'disabled' : '' %>">
+                <button class="page-button<%= isFirstPage ? ' block' : '' %>">
+                    &lt;
+                </button>
+            </a>
+            <a href="/list/next/<%= songs[songs.length - 1]._id %>" class="<%= songs.length < 5 ? 'disabled' : '' %>">
+                <button class="page-button<%= songs.length < 5 ? ' block' : '' %>">
+                    &gt;
+                </button>
+            </a>
+        </div>
+
+
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
