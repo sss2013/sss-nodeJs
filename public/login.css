@@ -1,0 +1,26 @@
+input {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    width: 300px;
+    font-size: 16px;
+}
+
+
+.form-container button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background-color: #45a049;
+    transition: all 0.3s ease;
+    transform: scale(1.05);
+}

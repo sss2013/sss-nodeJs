@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マイページ</title>
+    <link rel="stylesheet" href="/main.css">
+</head>
+
+<body>
+
+    <%- include('nav.ejs') %>
+
+        <div>
+            <p style="font-size: 24px; margin: 20px; font-weight: bold; text-align: center;">
+                <%= user.nickname %>さん、ようこそ
+            </p>
+            <ul style="font-size: 18px; margin: 20px;">
+                <p>好きな曲リスト</p>
+            </ul>
+        </div>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログイン</title>
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/login.css">
+</head>
+
+<body>
+    <%- include('nav.ejs') %>
+
+        <div class="form-container">
+            <form id="loginForm" action="/login" method="POST">
+
+                <label for="name">ID</label>
+                <input type="text" name="username" required>
+                <br>
+                <label for="password">パスワード</label>
+                <input type="password" name="password" required>
+                <br>
+                <button type="submit">ログイン</button>
+            </form>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $('#loginForm').on('submit', function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/login',
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        window.location.href = '/list';
+                    },
+                    error: function (xhr) {
+                        alert(xhr.responseText); // 서버에서 보내준 에러 메시지 표시
+                    }
+                });
+            });
+        </script>
+
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会員登録</title>
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/register.css">
+</head>
+
+<body>
+    <%- include('nav.ejs') %>
+
+        <div class="form-container">
+            <form id="registerForm" action="/register" method="POST">
+                <label for="username" class="label">● ID : 英字、数字のみ使用可能です</label>
+                <br>
+                <input type="text" id="username" name="username" placeholder="IDは6文字以上12文字以下で入力してください" required>
+                <br>
+                <label for="password">● パスワード : 英字、数字、記号をそれぞれ1つ以上含めてください</label>
+                <br>
+                <input type="password" id="password" name="password" placeholder="パスワードは8文字以上16文字以下で入力してください" required>
+                <br>
+                <input type="password" id="password2" name="password2" placeholder="確認のためもう一度パスワードを入力してください"
+                    onchange="checkPasswordMatch()" required>
+                <span id="pwMatchIcon" style="color:red; font-size:1.2em; display:none; vertical-align:middle;">❌</span>
+                <br>
+                <label for="nickname">● ニックネーム : ひらがな、カタカナ、英字、数字のみ使用可能で、ひらがな、カタカナ、英字のいずれかを含めてください</label>
+                <br>
+                <input type="text" id="nickname" name="nickname" placeholder="ニックネームは3文字以上15文字以下で入力してください" required>
+                <br>
+                <button type="submit">登録</button>
+            </form>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            function checkPasswordMatch() {
+                const password = $('#password').val();
+                const password2 = $('#password2').val();
+                if (password !== password2) {
+                    $('#pwMatchIcon').show();
+                } else {
+                    $('#pwMatchIcon').hide();
+                }
+            }
+
+            $('#registerForm').on('submit', function (e) {
+                const username = $('#username').val();
+                const password = $('#password').val();
+                const nickname = $('#nickname').val();
+
+                if (username.length < 6 || username.length > 12) {
+                    alert('IDは6文字以上12文字以下で入力してください');
+                    e.preventDefault();
+                    return false;
+                }
+                if (password.length < 4 || password.length > 16) {
+                    alert('パスワードは8文字以上16文字以下で入力してください');
+                    e.preventDefault();
+                    return false;
+                }
+                if (nickname.length < 3 || nickname.length > 15) {
+                    alert('ニックネームは3文字以上15文字以下で入力してください');
+                    e.preventDefault();
+                    return false;
+                }
+                if (!validateId(username)) {
+                    alert('IDは英字、数字のみ使用可能です');
+                    e.preventDefault();
+                    return false;
+                }
+                if (!validatePassword(password)) {
+                    alert('パスワードは英字、数字、記号!@#$%^&*\'-のみ使用可能で、英字、数字、記号をそれぞれ1つ以上含む必要があります');
+                    e.preventDefault();
+                    return false;
+                }
+                if (!validateNickname(nickname)) {
+                    alert('ニックネームはひらがな、カタカナ、英字、数字のみ使用可能で、ひらがな、カタカナ、英字のいずれかを含む必要があります');
+                    e.preventDefault();
+                    return false;
+                }
+
+                if (password !== password2) {
+                    alert('パスワードが一致しません');
+                    e.preventDefault();
+                    return false;
+                }
+
+            });
+
+            function validateId(str) {
+                const regex = /^[a-zA-Z\d]{6,30}$/;
+                return (
+                    regex.test(str) &&
+                    /[a-zA-Z]/.test(str) &&
+                    /\d/.test(str)
+                )
+            }
+            function validatePassword(str) {
+                const regex = /^[a-zA-Z\d!@#$%^&*'\-]{8,16}$/;
+                return (
+                    regex.test(str) &&
+                    /[a-zA-Z]/.test(str) &&
+                    /\d/.test(str) &&
+                    /[!@#$%^&*'\-]/.test(str)
+                )
+            }
+
+            function validateNickname(str) {
+                const regex = /^[a-zA-Z\dぁ-んァ-ン]{3,15}$/;
+                return (
+                    regex.test(str) &&
+                    /[a-zA-Zぁ-んァ-ン]/.test(str) // 영어, 히라가나, 카타카나 중 하나 이상 포함
+                );
+            }
+        </script>
+</body>
+
+</html>

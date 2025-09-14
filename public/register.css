@@ -1,0 +1,45 @@
+input {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    width: 300px;
+    font-size: 16px;
+}
+
+label {
+    font-size: 16px;
+    margin: 10px;
+}
+
+.form-container button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.form-container form {
+    margin: 10px auto 10px 5px;
+}
+
+.form-container label {
+    font-weight: bold;
+
+    font-size: 15px;
+    margin: 10px;
+}
+
+.form-container input {}
+
+
+.form-container input:focus {
+    outline: none;
+    border: 2px solid #4CAF50;
+    transition: all 0.3s ease;
+    transform: scale(1.02);
+}
