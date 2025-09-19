@@ -11,12 +11,15 @@
 
 <body class="grey-bg">
     <%- include('nav.ejs') %>
-
+        <form action="/search" method="GET" class="search-form">
+            <input type="text" name="name" placeholder="曲名を入力">
+            <button onclick="{}">検索</button>
+        </form>
         <div class="white-bg">
             <% songs.forEach(function(song) { %>
                 <div class="list-box">
                     <a href="/detail/<%= song._id %>">
-                        <img src="https://picsum.photos/seed/picsum/200/300" alt="Random Image" class="list-img">
+                        <img src="<%= song.image %>" alt="Random Image" class="list-img">
                     </a>
                     <h4>
                         <%= song.name %>
@@ -31,6 +34,58 @@
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
+            function renderPlayerList(list) {
+                let html = '';
+
+                if (list.length === 0) {
+                    html = `<div>曲情報がありません`
+                } else {
+                    list.forEach(function (song) {
+                        html += `
+                        <div class="list-box">
+                    <a href="/detail/${song._id}">
+                        <img src="${song.image}" alt="Random Image" class="list-img">
+                    </a>
+                    <h4>
+                        ${song.name}
+                    </h4>
+                    <p>
+                        ${song.artist}
+                    </p>
+
+                </div>
+                        `
+                    })
+                }
+
+                $('.white-bg').html(html);
+            }
+
+            $('.search-form').on('submit', function (e) {
+                e.preventDefault();
+                const name = $('input[name="name"]').val().trim();
+                if (!name) {
+                    e.preventDefault();
+                    alert('曲名を入力してください');
+                }
+
+                fetch(`/search/${encodeURIComponent(name)}`)
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error('検索に失敗しました');
+                        }
+                    })
+                    .then(data => {
+                        const songs = data.songs;
+                        renderPlayerList(songs);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('エラーが発生しました');
+                    });
+            });
             //リロードなしで削除、実装はしない
             // function deleteHandler(e) {
             //     if (!confirm('本当に削除しますか？')) {

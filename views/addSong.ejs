@@ -13,14 +13,16 @@
     <%- include('nav.ejs') %>
 
         <div class="form-container">
-            <form id="addForm" action="/add" method="POST">
+            <form id="addForm" action="/add" method="POST" enctype="multipart/form-data">
 
                 <label for="name">曲名:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name">
                 <br>
                 <label for="artist">アーティスト名:</label>
-                <input type="text" id="artist" name="artist" required>
+                <input type="text" id="artist" name="artist">
                 <br>
+                <input type="file" name="img1" accept="image/*">
+
                 <button type="submit">追加</button>
             </form>
         </div>

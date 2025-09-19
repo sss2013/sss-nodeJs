@@ -26,3 +26,37 @@
     margin: 5px;
     color: grey;
 }
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+.search-form input {
+    width: 300px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+    margin-right: 20px;
+}
+
+.search-form button {
+    height: 40px;
+    padding: 10px 15px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}

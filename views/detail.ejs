@@ -15,7 +15,7 @@
         <h1 style="margin-left:20px;">曲詳細ページ</h1>
         <div class="detail-container">
             <div class="detail-image">
-                <img src="https://picsum.photos/seed/picsum/300/300" alt="Random Image" class="list-img">
+                <img src="<%= song.image %>" alt="Random Image" class="list-img">
             </div>
             <div class="detail-description">
                 <a href="/update/<%= song._id %>">
@@ -65,6 +65,18 @@
                         alert('削除に失敗しました');
                     });
             });
+
+            $('.update-button').on('click', function (e) {
+                e.preventDefault();
+
+                axios.get('/update/<%= song._id %>')
+                    .then(function (res) {
+                        window.location.href = '/update/<%= song._id %>';
+                    })
+                    .catch(function (err) {
+                        alert('ログインしてください');
+                    });
+            })
         </script>
 
 </body>

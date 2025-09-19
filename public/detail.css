@@ -27,6 +27,12 @@
     transition: all 0.3s ease;
 }
 
+.delete-button:hover {
+    background-color: grey;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
 .delete-button {
     background-color: red;
     border: none;
