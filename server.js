@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const port = 8080;
+const path = require('path');
 const cors = require('cors');
 const { MongoClient, ObjectId } = require("mongodb");
 const session = require('express-session');
@@ -34,7 +35,7 @@ const upload = multer({
         bucket: s3Bucket,
         key: function (req, file, cb) {
             const ext = path.extname(file.originalname);
-            cb(null, 'images/' + Date.now() + ext);
+            cb(null, 'images/' + new Date().toString() + ext);
         }
     })
 })
@@ -110,15 +111,7 @@ connectDB.then((client) => {
 
     app.use('/list', require('./routes/list.js'))
 
-    app.get('/api/hello', async (req, res) => {
-        const list = await db.collection('songs').find().toArray();
-        const songs = list.map(song => ({
-            id: song._id,
-            artist: song.artist,
-            name: song.name,
-        }));
-        res.json({ songs });
-    })
+
 
     app.get('/', (req, res) => {
         res.render('home.ejs', { user: req.user });
@@ -141,6 +134,7 @@ connectDB.then((client) => {
     app.post('/add', upload.single('img1'), async (req, res) => {
 
         const { artist, name } = req.body;
+
         const img = req.file.location;
 
         if (artist === "" || name === "") {
@@ -163,10 +157,13 @@ connectDB.then((client) => {
             let result = await db.collection('songs').findOne({
                 _id: new ObjectId(req.params.id)
             })
+            let comments = await db.collection('comments').find({
+                parentId: new ObjectId(req.params.id)
+            }).toArray()
             if (result == null) {
                 return res.status(404).send('Song not found')
             }
-            res.render('detail.ejs', { song: result, user: req.user })
+            res.render('detail.ejs', { song: result, comments: comments, user: req.user })
         } catch (e) {
             console.log(e)
             return res.status(400).send('Invalid ID format')
@@ -329,6 +326,26 @@ connectDB.then((client) => {
             return res.status(200).json({ songs: result, user: req.user })
         } catch (err) {
             return res.status(404).send('曲が存在しません')
+        }
+    })
+
+    app.post('/commentPost', checkLogin, async (req, res) => {
+        const { id, comment, userId, username } = req.body;
+
+        if (id === "" || comment === "" || userId === "" || username === "") {
+            return res.status(400).send('ID and comment are required');
+        }
+        try {
+            await db.collection('comments').insertOne({
+                parentId: new ObjectId(id),
+                comment: comment,
+                userId: req.user._id,
+                username: req.user.username,
+            })
+            res.redirect(`/detail/${id}`);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).send('Error posting comment');
         }
     })
 

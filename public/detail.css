@@ -1,5 +1,5 @@
 .detail-container {
-    flex-wrap: wrap;
+    flex-wrap: wrap-reverse;
     display: flex;
 }
 
@@ -67,4 +67,21 @@
     height: 128px;
     background-color: grey;
     border-radius: 10px;
+}
+
+.comment-section {
+    margin-top: 30px;
+    flex-wrap: wrap;
+    display: flex;
+
+}
+
+.comment-section textarea,
+button {
+    margin: 10px;
+}
+
+.comment-section form {
+    display: flex;
+    flex-wrap: wrap;
 }

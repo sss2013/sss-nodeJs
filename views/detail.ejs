@@ -46,38 +46,122 @@
                     </p>
                 </div>
             </div>
-        </div>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script>
-            $('.delete-button').on('click', function () {
-                if (!confirm('本当に削除しますか？')) {
-                    return;
-                }
-                axios.delete('/delete', {
-                    data: { id: '<%= song._id %>' }
+            <div class="comment-section">
+                <form action="/commentPost" method="Post">
+                    <input type="hidden" name="id" value="<%= song._id %>">
+                    <textarea id="commentField" name="comment" placeholder="ログインしたユーザーだけコメントできます" rows="3"
+                        cols="40"></textarea>
+                    <br>
+                    <button id="submitButton" type="submit">コメント</button>
+            </div>
+            <div class="comments-list">
+                <h2>コメント一覧</h2>
+                <% if (comments.length===0) { %>
+                    <p>まだコメントはありません。</p>
+                    <% } else { %>
+                        <% comments.forEach(function(comment) { %>
+                            <div class="comment-item">
+                                <p><strong>
+                                        <%= comment.username %>:
+                                    </strong>
+                                    <%= comment.comment %>
+                                </p>
+                            </div>
+                            <% }); %>
+                                <% } %>
+            </div>
+
+
+
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+            <script>
+
+                $('.delete-button').on('click', function () {
+                    if (!confirm('本当に削除しますか？')) {
+                        return;
+                    }
+                    axios.delete('/delete', {
+                        data: {
+                            id: '<%= song._id %>'
+                        }
+                    })
+                        .then(function (res) {
+                            alert('削除しました');
+                            window.location.href = '/list';
+                        })
+                        .catch(function (err) {
+                            alert('削除に失敗しました');
+                        });
+                });
+
+                $('.update-button').on('click', function (e) {
+                    e.preventDefault();
+
+                    axios.get('/update/<%= song._id %>')
+                        .then(function (res) {
+                            window.location.href = '/update/<%= song._id %>';
+                        })
+                        .catch(function (err) {
+                            alert('ログインしてください');
+                        });
                 })
-                    .then(function (res) {
-                        alert('削除しました');
-                        window.location.href = '/list';
-                    })
-                    .catch(function (err) {
-                        alert('削除に失敗しました');
-                    });
-            });
 
-            $('.update-button').on('click', function (e) {
-                e.preventDefault();
-
-                axios.get('/update/<%= song._id %>')
-                    .then(function (res) {
-                        window.location.href = '/update/<%= song._id %>';
-                    })
-                    .catch(function (err) {
+                $('#commentField').on('click', function (e) {
+                    const user = '<%= user %>';
+                    if (!user) {
+                        e.preventDefault();
                         alert('ログインしてください');
-                    });
-            })
-        </script>
+                        return;
+                    }
+                })
+
+                $('#submitButton').on('click', function (e) {
+                    e.preventDefault();
+
+                    const user = '<%= user %>';
+                    if (!user) {
+                        e.preventDefault();
+                        alert('ログインしてください');
+                        return;
+                    }
+
+                    const comment = $('#commentField').val().trim();
+
+                    if (!comment) {
+                        e.preventDefault();
+                        alert('コメントを入力してください');
+                        return;
+                    }
+
+                    const userId = user._id;
+                    const username = user.name;
+
+                    fetch('/commentPost', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id: '<%= song._id %>',
+                            userId: userId,
+                            username: username,
+                            comment: comment
+                        })
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                alert('コメントを投稿しました');
+                                window.location.reload();
+                            } else {
+                                alert('コメントの投稿に失敗しました');
+                            }
+                        })
+                        .catch(error => {
+                            alert('コメントの投稿に失敗しました');
+                        });
+                })
+            </script>
 
 </body>
 
