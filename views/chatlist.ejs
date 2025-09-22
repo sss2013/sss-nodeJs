@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ルームリスト</title>
+    <link rel="stylesheet" href="/main.css">
+</head>
+<style>
+    .room-create {
+        display: block;
+        float: right;
+        margin-right: 50px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+
+        .chatlist-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+    }
+</style>
+
+<body>
+    <%- include('nav.ejs') %>
+        <h1 style="justify-content: center; text-align: center;">ルーム一覧</h1>
+        <button class="room-create" onclick="window.location.href='/createRoom'">ルーム作成</button>
+
+        <div class="chatlist-container">
+            <% rooms.forEach(function(room) { %>
+                <div class="chatroom" style="flex-wrap: wrap; display: flex;">
+                    <a href="/chatroom/<%= room._id %>" class="chatroom-link">
+                        <img src="<%= room.image %>" alt="Room Image" class="list-img"
+                            style="width:100px; height:100px; object-fit: cover; border-radius: 10px; margin:10px;">
+                    </a>
+                    <div>
+                        <h2>
+                            <%= room.roomName %>
+                        </h2>
+                        <p>
+                            master: <%= room.master %>
+                        </p>
+                    </div>
+                </div>
+                <% }) %>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $('.chatroom-link').on('click', function () {
+                const user = '<%= user %>';
+                if (!user) {
+                    alert('ログインしてください');
+                    return false;
+                }
+
+            }); 
+        </script>
+</body>
+
+</html>

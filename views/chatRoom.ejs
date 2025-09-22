@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チャットルーム</title>
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/chatRoom.css">
+</head>
+
+<body>
+    <%- include('nav.ejs') %>
+        <div class="chatroom-container" style="flex-wrap:wrap; display:flex; margin-left:20px;">
+            <div class="chatroom-info">
+                <h2>
+                    <%= room.roomName %>
+                </h2>
+                <div class="info-box">
+                    <button id="infoButton">▶ルーム情報</button>
+                    <div class="room-info block">
+                        <h2 style="margin-right:10px;">マスター: <%= room.master %>
+                        </h2>
+                        <h2>メンバー数: <%= room.members.length %>
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="chat-input">
+                    <textarea id="messageInput" type="text" placeholder="メッセージを入力..." rows="3" cols="50"
+                        required></textarea>
+                    <button id="sendButton">送信</button>
+                </div>
+            </div>
+
+            <div class="chat-messages">
+                <% messages.forEach(message=> { %>
+                    <% if (user.nickname===message.sender) { %>
+                        <div class="message mine" style="text-align: right;">
+
+                            <span style="background-color: #DCF8C6; padding: 5px 10px; border-radius: 10px; display:
+                                inline-block; max-width: 70%;">
+                                <%= message.message %>
+                            </span>
+                        </div>
+                        <% } else { %>
+                            <div class="message">
+                                <span style="background-color: #DCF8C6; padding: 5px 10px; border-radius: 10px; display:
+                                inline-block; max-width: 70%;">
+                                    <%= message.sender %>
+                                </span>
+                                <span>
+                                    : <%= message.message %>
+                                </span>
+
+                            </div>
+                            <% } %>
+                                <% }) %>
+            </div>
+
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/socket.io@4.7.2/client-dist/socket.io.min.js"></script>
+        <script>
+            const socket = io()
+            const roomId = '<%= room._id %>';
+            const username = '<%= user.nickname %>';
+
+            socket.emit('ask-join', roomId);
+
+            socket.on('broadcast', (data) => {
+                fetchMessages(data);
+            });
+
+            $('#infoButton').on('click', function () {
+                $('.room-info').toggleClass('block');
+            });
+
+            $('#sendButton').on('click', function () {
+
+                const message = $('#messageInput').val();
+                if (message.trim() === '') return;
+
+                socket.emit('message', { msg: message, room: roomId, sender: username });
+
+            });
+
+            function fetchMessages(message) {
+                const chatMessages = $('.chat-messages');
+                if (message.sender === username) {
+
+                    chatMessages.append(`
+                <div class="message mine" style="text-align: right;">
+
+                            <span style="background-color: #DCF8C6; padding: 5px 10px; border-radius: 10px; display:
+                                inline-block; max-width: 70%;">
+                                ${message.msg}
+                            </span>
+                        </div>
+            `)
+                } else {
+                    chatMessages.append(`
+                            <div class="message">
+                                <span style="background-color: #DCF8C6; padding: 5px 10px; border-radius: 10px; display:
+                                inline-block; max-width: 70%;">
+                                    ${message.sender}
+                                </span>
+                                <span>
+                                    : ${message.msg}
+                                </span>
+
+                            </div>
+            `)
+                }
+                $('#messageInput').val('');
+
+
+                // 스크롤을 항상 아래로 유지
+                chatMessages.scrollTop(chatMessages[0].scrollHeight);
+
+            }
+
+
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ルーム作成</title>
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/addSong.css">
+</head>
+
+<body>
+    <h1>ルーム作成</h1>
+    <form class="form-container " action="/createroom" method="POST" enctype="multipart/form-data">
+        <label for="roomName">ルーム名 :</label>
+        <input type="text" id="roomName" name="roomName" placeholder="不適切な名前は検討の上で削除されます" required>
+        <br>
+        <label for="img1">ルームのサムネ :</label>
+        <input type="file" name="img1" accept="image/*">
+        <br>
+        <button type="submit">作成</button>
+    </form>
+</body>
+
+</html>

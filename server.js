@@ -13,6 +13,10 @@ const methodOverride = require('method-override');
 const bcrypt = require('bcrypt');
 const MongoStore = require('connect-mongo');
 const { S3Client } = require('@aws-sdk/client-s3');
+const { createServer } = require('http')
+const { Server } = require('socket.io')
+const server = createServer(app)
+const io = new Server(server)
 const s3AccessKey = process.env.S3_ACCESSKEY
 const s3SecretKey = process.env.S3_SECRETKEY
 const s3Bucket = process.env.S3_BUCKET
@@ -47,9 +51,8 @@ let db;
 connectDB.then((client) => {
     console.log('DB connected')
     db = client.db('music_db')
-    app.locals.db = db; // 반드시 할당
+    app.locals.db = db;
 
-    // 미들웨어 등록
     app.use(cors());
     app.set('view engine', 'ejs')
     app.use(express.json());
@@ -110,7 +113,6 @@ connectDB.then((client) => {
     }
 
     app.use('/list', require('./routes/list.js'))
-
 
 
     app.get('/', (req, res) => {
@@ -349,11 +351,99 @@ connectDB.then((client) => {
         }
     })
 
-    // 서버 시작
-    app.listen(port, () => {
+    app.get('/chatlist', async (req, res) => {
+        let rooms = await db.collection('chatrooms').find().toArray()
+
+        res.render('chatlist.ejs', { rooms: rooms, user: req.user })
+    });
+
+    app.get('/createroom', checkLogin, (req, res) => {
+        if (!req.user) {
+            return res.status(400).send('ログインしてください')
+        }
+        res.render('createRoom.ejs', { user: req.user })
+    })
+
+    app.post('/createroom', checkLogin, upload.single('img1'), async (req, res) => {
+        const username = req.user.username;
+        const { roomName } = req.body;
+
+        const img = req.file ? req.file.location : null;
+
+        if (roomName === "") {
+            return res.status(400).send('チャットルーム名を入力してください');
+        }
+
+        try {
+            let result = await db.collection('chatrooms').insertOne({
+                roomName: roomName,
+                master: username,
+                members: [username],
+                image: img
+            });
+            res.redirect('/chatlist');
+        } catch (err) {
+            console.error(err);
+            return res.status(500).send('Error creating chat room');
+        }
+    })
+
+    app.get('/chatroom/:id', checkLogin, async (req, res) => {
+        if (!req.user) {
+            return res.status(400).send('ログインしてください')
+        }
+
+        let room = await db.collection('chatrooms').findOne({ _id: new ObjectId(req.params.id) })
+        let messages = await db.collection('chatmessages').find({ roomId: new ObjectId(req.params.id) }).toArray()
+        res.render('chatRoom.ejs', { room: room, messages: messages, user: req.user })
+    })
+
+    app.post('/sendMessage', checkLogin, async (req, res) => {
+        const { roomId, message } = req.body;
+        const username = req.user.username;
+        if (roomId === "" || message === "") {
+            return res.status(400).send('ID and message are required');
+        }
+        try {
+            await db.collection('chatrooms').updateOne(
+                { _id: new ObjectId(roomId) },
+                { $addToSet: { members: username } }
+            )
+            await db.collection('chatmessages').insertOne({
+                roomId: new ObjectId(roomId),
+                sender: username,
+                message: message,
+            })
+            return res.status(200).send('Message sent');
+        } catch (err) {
+            console.error(err);
+            return res.status(500).send('Error sending message');
+        }
+    })
+
+    io.on('connection', (socket) => {
+        console.log('a user connected');
+
+        socket.on('ask-join', (data) => {
+            socket.join(data);
+        })
+
+        socket.on('message', async (data) => {
+            io.to(data.room).emit('broadcast', data);
+            await db.collection('chatmessages').insertOne({
+                roomId: new ObjectId(data.room),
+                sender: data.sender,
+                message: data.msg,
+            })
+        })
+
+    });
+
+
+
+    server.listen(port, () => {
         console.log('Server is running on port 8080')
     })
 }).catch((err) => {
     console.log(err)
 })
-

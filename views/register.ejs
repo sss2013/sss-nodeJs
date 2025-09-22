@@ -50,6 +50,7 @@
                 const username = $('#username').val();
                 const password = $('#password').val();
                 const nickname = $('#nickname').val();
+                const password2 = $('#password2').val();
 
                 if (username.length < 6 || username.length > 12) {
                     alert('IDは6文字以上12文字以下で入力してください');
@@ -83,6 +84,7 @@
                 }
 
                 if (password !== password2) {
+
                     alert('パスワードが一致しません');
                     e.preventDefault();
                     return false;
